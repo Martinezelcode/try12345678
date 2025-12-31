@@ -255,6 +255,19 @@ export const challengeMessages = pgTable("challenge_messages", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Track participants who join challenges
+export const challengeParticipants = pgTable("challenge_participants", {
+  id: serial("id").primaryKey(),
+  challengeId: integer("challenge_id").notNull(),
+  userId: varchar("user_id").notNull(),
+  side: varchar("side").notNull(), // "YES" or "NO"
+  amount: integer("amount").notNull(), // stake in coins
+  payoutAmount: integer("payout_amount").default(0),
+  status: varchar("status").default("active"), // active, settled, refunded
+  joinedAt: timestamp("joined_at").defaultNow(),
+  payoutAt: timestamp("payout_at"),
+});
+
 // Secure fund holding for challenges
 export const escrow = pgTable("escrow", {
   id: serial("id").primaryKey(),
